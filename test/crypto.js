@@ -1,5 +1,6 @@
 const Tester = require('hubot-test-helper')
 const chai = require('chai')
+const nock = require('nock')
 const expect = chai.expect
 
 let delayPromise = function (ms, payload) {
@@ -12,38 +13,48 @@ const helper = new Tester('../src/crypto.js')
 
 describe('Crypto', function () {
   var room
-  beforeEach('setup', function () {
+  beforeEach('setupRoom', function () {
     room = helper.createRoom()
+    nock('https://min-api.cryptocompare.com')
+      .get('/data/price')
+      .query({ fsym: 'BTC', tsyms: 'USD' })
+      .times(2)
+      .reply(200, JSON.stringify({ 'USD': 100 }))
+
+    nock('https://min-api.cryptocompare.com')
+      .get('/data/price')
+      .query({ fsym: 'ETH', tsyms: 'USD' })
+      .times(2)
+      .reply(200, JSON.stringify({ 'USD': 10 }))
   })
 
-  afterEach('teardown', function () {
+  afterEach('teardownRoom', function () {
     room.destroy()
   })
 
   describe('Chat Commands', function () {
-    this.timeout(3000)
     it('BTC->USD', function () {
       return room.user.say('Alice', 'BTC->USD').then(function () {
-        return delayPromise(2000)
+        return delayPromise(100)
       }).then(function () {
-        expect(room.messages.length).to.equal(2)
-        expect(room.messages[1][1]).to.match(/@Alice 1 BTC -> ([0-9.]*) USD/)
+        expect(room.messages).to.eql([
+          ['Alice', 'BTC->USD'],
+          ['hubot', '@Alice 1 BTC -> 100 USD']
+        ])
       })
     })
     it('hubot eth/usd', function () {
-      return room.user.say('Alice', 'hubot btc/usd')
+      return room.user.say('Alice', 'hubot eth/usd')
         .then(function () {
-          return delayPromise(2000)
-        }).then(function () {
-          expect(room.messages.length).to.equal(2)
-          expect(room.messages[1][1]).to.match(/@Alice 1 BTC -> ([0-9.]*) USD/)
+          expect(room.messages).to.eql([
+            ['Alice', 'hubot eth/usd'],
+            ['hubot', '@Alice 1 ETH -> 10 USD']
+          ])
         })
     })
     it('hubot crypto list', function () {
       return room.user.say('Alice', 'hubot crypto list')
         .then(function () {
-          return delayPromise(100)
-        }).then(function () {
           expect(room.messages).to.eql([
             ['Alice', 'hubot crypto list'],
             ['hubot', '@Alice ¯\\_(ツ)_/¯ Use `crypto add` to add pairs to your report']
@@ -53,15 +64,9 @@ describe('Crypto', function () {
     it('hubot add eth/usd, btc/usd', function () {
       return room.user.say('Alice', 'hubot crypto add eth/usd')
         .then(function () {
-          return delayPromise(100)
-        }).then(function () {
           return room.user.say('Alice', 'hubot crypto add btc/usd')
         }).then(function () {
-          return delayPromise(100)
-        }).then(function () {
           return room.user.say('Alice', 'hubot crypto list')
-        }).then(function () {
-          return delayPromise(100)
         }).then(function () {
           expect(room.messages).to.eql([
             ['Alice', 'hubot crypto add eth/usd'],
@@ -83,21 +88,16 @@ describe('Crypto', function () {
         })
     })
     it('!crypto', function () {
-      this.timeout(5000)
       return room.user.say('Alice', 'hubot crypto add eth/usd')
         .then(function () {
-          return delayPromise(100)
-        }).then(function () {
           return room.user.say('Alice', 'hubot crypto add btc/usd')
-        }).then(function () {
-          return delayPromise(100)
         }).then(function () {
           return room.user.say('Alice', '!crypto')
         }).then(function () {
-          return delayPromise(3000)
+          return delayPromise(100)
         }).then(function () {
           expect(room.messages.length).to.equal(6)
-          expect(room.messages[5]).to.match(/@Alice 1 ETH -> ([0-9.]*) USD\n1 BTC -> ([0-9.]*) USD/)
+          expect(room.messages[5]).to.match(/@Alice 1 ETH -> 10 USD\n1 BTC -> 100 USD/)
         })
     })
   })

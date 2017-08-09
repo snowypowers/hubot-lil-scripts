@@ -13,7 +13,8 @@
     "url": "https://github.com/snowypowers/hubot-lil-scripts/issues"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.2"
+    "cheerio": "^1.0.0-rc.2",
+    "nock": "^9.0.14"
   },
   "peerDependencies": {
     "hubot": "2.x"

@@ -237,7 +237,7 @@ describe('Auth', function () {
       it('Unknown use', function () {
         return room.user.say('Unknown', 'hubot ban @Bob 1')
           .then(function () {
-            return delayPromise(500)
+            return delayPromise(100)
           })
           .then(function () {
             expect(room.messages).to.eql([

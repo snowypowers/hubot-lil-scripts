@@ -16,7 +16,7 @@
 //   Yak Jun Xiang <yakjunxiang@gmail.com>
 //
 
-const methods = require('../src/neo.js')
+const methods = require('../helper/neo.js')
 const printBlock = methods.printBlock
 const printTxn = methods.printTxn
 

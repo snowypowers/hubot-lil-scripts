@@ -1,16 +1,17 @@
 const Tester = require('hubot-test-helper')
 const chai = require('chai')
 const expect = chai.expect
+const nock = require('nock')
 
-let delayPromise = function (ms, payload) {
-  return new Promise(function (resolve) {
-    setTimeout(function () { resolve(payload) }, ms)
-  })
-}
-
+process.env.HUBOT_NEO_ADDR = 'http://localhost/'
 const helper = new Tester('../src/neo.js')
 const methods = require('../helper/neo.js')
 
+const expectedHeight = {
+  'jsonrpc': '2.0',
+  'id': 92,
+  'result': 999
+}
 const sampleBlock = {
   'jsonrpc': '2.0',
   'id': 3,
@@ -173,8 +174,20 @@ Block:
 
 describe('Neo', function () {
   var room
+
   beforeEach('setup', function () {
     room = helper.createRoom()
+    nock(process.env.HUBOT_NEO_ADDR)
+      .post('/', { 'jsonrpc': '2.0', 'method': 'getblock', 'params': [123456, 1], 'id': 92 })
+      .reply(200, JSON.stringify(sampleBlock))
+
+    nock(process.env.HUBOT_NEO_ADDR)
+      .post('/', { 'jsonrpc': '2.0', 'method': 'getblockcount', 'params': [], 'id': 92 })
+      .reply(200, JSON.stringify(expectedHeight))
+
+    nock(process.env.HUBOT_NEO_ADDR)
+      .post('/', { 'jsonrpc': '2.0', 'method': 'getrawtransaction', 'params': [sampleTxId, 1], 'id': 92 })
+      .reply(200, JSON.stringify(sampleTxn))
   })
 
   afterEach('teardown', function () {
@@ -194,24 +207,17 @@ describe('Neo', function () {
   })
 
   describe('Chat Commands', function () {
-    this.timeout(5000)
     it('neo height', function () {
       return room.user.say('Alice', 'hubot neo height')
         .then(function () {
-          return delayPromise(3000)
-        })
-        .then(function () {
           expect(room.messages.length).to.equal(2)
           expect(room.messages[1][0]).to.equal('hubot')
-          expect(room.messages[1][1]).to.match(/@Alice The current blockheight is `([0-9]*)`./)
+          expect(room.messages[1][1]).to.equal('@Alice The current blockheight is `999`.')
         })
     })
 
     it('neo block', function () {
       return room.user.say('Alice', 'hubot neo block 123456')
-        .then(function () {
-          return delayPromise(3000)
-        })
         .then(function () {
           expect(room.messages.length).to.equal(2)
           expect(room.messages[1][0]).to.equal('hubot')
@@ -221,9 +227,6 @@ describe('Neo', function () {
 
     it('neo transaction', function () {
       return room.user.say('Alice', `hubot neo transaction ${sampleTxId}`)
-        .then(function () {
-          return delayPromise(3000)
-        })
         .then(function () {
           expect(room.messages.length).to.equal(2)
           expect(room.messages[1][0]).to.equal('hubot')

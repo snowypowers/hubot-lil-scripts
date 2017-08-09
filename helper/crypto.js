@@ -6,7 +6,7 @@ const getPair = (robot, fs, ts) => {
       .query('tsyms', ts)
       .get()((err, resp, body) => {
         if (err) {
-          reject(new Error(`Something went wrong with the API :(`))
+          reject(new Error(`Something went wrong with the API :( ${err}`))
         } else {
           const data = JSON.parse(body)
           if (data.Response === 'Error') {

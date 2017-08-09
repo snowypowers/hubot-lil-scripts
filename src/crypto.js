@@ -35,57 +35,43 @@ module.exports = function (robot) {
     }
   })
   robot.hear(/([0-9.]*)? ?([A-Z]{3})->([A-Z]{3})/, { id: 'crypto.getpair', powerLevel: 3 }, (res) => {
-    robot.http('https://min-api.cryptocompare.com/data/price')
-      .query('fsym', res.match[2])
-      .query('tsyms', res.match[3])
-      .get()((err, resp, body) => {
-        if (err) {
-          res.reply('Something went wrong with the API :(')
-        } else {
-          try {
-            const data = JSON.parse(body)
-            let amt = parseFloat(res.match[1])
-            if (isNaN(amt)) {
-              amt = 1
-            }
-            const conversion = parseFloat(data[res.match[3]])
-            if (isNaN(conversion)) {
-              throw new Error('Conversion should be parsable')
-            }
-            res.reply(`${amt} ${res.match[2]} -> ${amt * conversion} ${res.match[3]} `)
-          } catch (e) {
-            res.reply('Something went wrong with the response :(')
-          }
+    getPair(robot, res.match[2], res.match[3]).then((data) => {
+      try {
+        let amt = parseFloat(res.match[1])
+        if (isNaN(amt)) {
+          amt = 1
         }
-      })
+        const conversion = parseFloat(data[res.match[3]])
+        if (isNaN(conversion)) {
+          throw new Error('Conversion should be parsable')
+        }
+        res.reply(`${amt} ${res.match[2]} -> ${amt * conversion} ${res.match[3]}`)
+      } catch (e) {
+        res.reply(`Something went wrong with the response :( ${e}`)
+      }
+    }, (err) => res.reply(err))
   })
 
   robot.respond(/([A-Za-z]{3})\/([A-Za-z]{3})$/, { id: 'crypto.getpair', powerLevel: 3 }, (res) => {
     const fs = res.match[1].toUpperCase()
     const ts = res.match[2].toUpperCase()
-    robot.http('https://min-api.cryptocompare.com/data/price')
-      .query('fsym', fs)
-      .query('tsyms', ts)
-      .get()((err, resp, body) => {
-        if (err) {
-          res.reply('Something went wrong with the API :(')
-        } else {
-          try {
-            const data = JSON.parse(body)
-            const conversion = parseFloat(data[ts])
-            if (isNaN(conversion)) {
-              throw new Error('Conversion should be parsable')
-            }
-            res.reply(`1 ${fs} -> ${conversion} ${ts} `)
-          } catch (e) {
-            res.reply('Something went wrong with the response :( ' + e)
-          }
+    getPair(robot, fs, ts).then((data) => {
+      try {
+        const conversion = parseFloat(data[ts])
+        if (isNaN(conversion)) {
+          throw new Error('Conversion should be parsable')
         }
-      })
+        res.reply(`1 ${fs} -> ${conversion} ${ts}`)
+      } catch (e) {
+        res.reply(`Something went wrong with the response :( ${e}`)
+      }
+    }, (err) => res.reply(err))
   })
 
   robot.respond(/crypto add ([A-Za-z]{3})\/([A-Za-z]{3})$/, { id: 'crypto.add', powerLevel: 3 }, (res) => {
-    const query = res.match[1].toUpperCase() + '/' + res.match[2].toUpperCase()
+    const fs = res.match[1].toUpperCase()
+    const ts = res.match[2].toUpperCase()
+    const query = fs + '/' + ts
     if (!crypto[res.message.user.id]) {
       crypto[res.message.user.id] = []
     }
@@ -93,7 +79,7 @@ module.exports = function (robot) {
     if (report.indexOf(query) >= 0) {
       res.reply(`This query is already added!`)
     } else {
-      getPair(robot, query[0], query[1]).then(function (result) {
+      getPair(robot, fs, ts).then(function (result) {
         if (result) {
           report.push(query)
           res.reply(`Added ${query}`)
