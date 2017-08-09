@@ -1,7 +1,7 @@
 const chai = require('chai')
 const assert = chai.assert
 
-const weather = require('../src/weather.js')
+const weather = require('../helper/weather.js')
 const getMatch = weather.getMatch
 const getAlias = weather.helpers.getAlias
 const getCloseMatch = weather.getCloseMatch

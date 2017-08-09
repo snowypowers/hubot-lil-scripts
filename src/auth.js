@@ -5,18 +5,20 @@
 //   hubot-brain-redis
 //
 // Configuration:
-//   None
+//   HUBOT_AUTH_ADMIN - The name of the first admin
 //
 // Commands:
-//   auth @user <n> - Change @user to power level <n>
-//   auth list - Displays everyone's rank
-//   auth ban @user <t> - Bans @user for <t> minutes. Requires superuser.
-//   auth clear @user's name - Unbans @user. Requires superuser.
+//   hubot auth - Show current user's power level
+//   hubot auth ban @user <t> - Bans @user for <t> minutes. Requires superuser.
+//   hubot auth clear @user's name - Unbans @user. Requires superuser.
+//   hubot auth list - Displays everyone's rank
+//   hubot auth @user <n> - Change @user to power level <n>
 // Notes:
 //   None
 //
 // Author:
 //   Yak Jun Xiang<yakjunxiang@gmail.com>
+//
 
 module.exports = function (robot) {
   let admin = robot.brain.userForName(process.env.HUBOT_AUTH_ADMIN)

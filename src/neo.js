@@ -8,8 +8,8 @@
 //   HUBOT_NEO_ADDR - The url for the full node
 //
 // Commands:
-//   hubot neo height - Get the current height of the blockchain
 //   hubot neo block <hash|index> - Get block. Accepts hash and index
+//   hubot neo height - Get the current height of the blockchain
 //   hubot neo transaction <hash> - Get transaction
 //
 // Author:

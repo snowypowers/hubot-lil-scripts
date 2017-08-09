@@ -3,7 +3,7 @@ const chai = require('chai')
 const expect = chai.expect
 
 process.env.HUBOT_AUTH_ADMIN = 'Alice'
-const helper = new Tester('../scripts/auth.js')
+const helper = new Tester('../src/auth.js')
 
 let delayPromise = function (ms, payload) {
   return new Promise(function (resolve) {

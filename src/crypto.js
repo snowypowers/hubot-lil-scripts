@@ -20,8 +20,9 @@
 //
 // Author:
 //   Yak Jun Xiang<yakjunxiang@gmail.com>
+//
 
-const getPair = require('../src/crypto.js')
+const getPair = require('../helper/crypto.js')
 
 module.exports = function (robot) {
   let crypto = {}

@@ -8,7 +8,7 @@ let delayPromise = function (ms, payload) {
   })
 }
 
-const helper = new Tester('../scripts/crypto.js')
+const helper = new Tester('../src/crypto.js')
 
 describe('Crypto', function () {
   var room

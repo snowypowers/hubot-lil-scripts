@@ -8,8 +8,8 @@ let delayPromise = function (ms, payload) {
   })
 }
 
-const helper = new Tester('../scripts/neo.js')
-const methods = require('../src/neo.js')
+const helper = new Tester('../src/neo.js')
+const methods = require('../helper/neo.js')
 
 const sampleBlock = {
   'jsonrpc': '2.0',

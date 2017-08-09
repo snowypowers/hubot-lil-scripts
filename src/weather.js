@@ -12,14 +12,13 @@
 //   hubot weather <area> - Returns the 2 hour forecast for <area>
 //   hubot daycast - Returns a 24hrs overall forecast for Singapore
 //
-//
 // Notes:
-//
 //
 // Author:
 //   Yak Jun Xiang<snowypowers@gmail.com>
+//
 
-const w = require('../src/weather.js')
+const w = require('../helper/weather.js')
 
 module.exports = function (robot) {
   robot.respond(/weather area list/i, { id: 'weather.area.list', powerLevel: 2 }, (res) => {
