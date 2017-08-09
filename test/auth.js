@@ -34,7 +34,7 @@ describe('Auth', function () {
       .then(function () {
         room.user.say('Alice', 'hubot auth load')
         room.user.say('Omega', 'hubot auth list')
-        return delayPromise(100)
+        return delayPromise(10)
       })
       .then(function () {
         room.messages = []
@@ -49,7 +49,7 @@ describe('Auth', function () {
     it('Alice is admin', function () {
       return room.user.say('Alice', 'hubot auth')
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           expect(room.messages).to.eql([
@@ -62,7 +62,7 @@ describe('Auth', function () {
     it('Bob is superuser', function () {
       return room.user.say('Bob', 'hubot auth')
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           expect(room.messages).to.eql([
@@ -75,7 +75,7 @@ describe('Auth', function () {
     it('Charlie is user', function () {
       return room.user.say('Charlie', 'hubot auth')
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           expect(room.messages).to.eql([
@@ -88,7 +88,7 @@ describe('Auth', function () {
     it('Dick is restricted', function () {
       return room.user.say('Dick', 'hubot auth')
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           expect(room.messages).to.eql([
@@ -101,7 +101,7 @@ describe('Auth', function () {
     it('Eve is banned', function () {
       return room.user.say('Eve', 'hubot auth')
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           expect(room.messages).to.eql([
@@ -114,7 +114,7 @@ describe('Auth', function () {
     it('Frank is unspeakable', function () {
       return room.user.say('Frank', 'hubot auth')
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           expect(room.messages.length).to.equal(1)
@@ -126,19 +126,19 @@ describe('Auth', function () {
     it('Gets one notice of banned', function () {
       return room.user.say('Eve', 'hubot hi')
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           return room.user.say('Eve', 'hubot auth')
         })
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           return room.user.say('Eve', 'hubot auth list')
         })
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           expect(room.messages).to.be.eql([
@@ -155,7 +155,7 @@ describe('Auth', function () {
       room.messages = []
       return room.user.say('Eve', 'hubot auth')
         .then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         })
         .then(function () {
           expect(room.messages).to.be.eql([
@@ -172,13 +172,13 @@ describe('Auth', function () {
       it('Admin use', function () {
         return room.user.say('Alice', 'hubot ban @Charlie 1')
           .then(function () {
-            return delayPromise(100)
+            return delayPromise(10)
           })
           .then(function () {
             return room.user.say('Charlie', 'hubot auth')
           })
           .then(function () {
-            return delayPromise(100)
+            return delayPromise(10)
           })
           .then(function () {
             expect(room.messages).to.eql([
@@ -194,13 +194,13 @@ describe('Auth', function () {
       it('Superuser use', function () {
         return room.user.say('Bob', 'hubot ban @Charlie 1')
           .then(function () {
-            return delayPromise(100)
+            return delayPromise(10)
           })
           .then(function () {
             return room.user.say('Charlie', 'hubot auth')
           })
           .then(function () {
-            return delayPromise(100)
+            return delayPromise(10)
           })
           .then(function () {
             expect(room.messages).to.eql([
@@ -216,13 +216,13 @@ describe('Auth', function () {
       it('User use', function () {
         return room.user.say('Charlie', 'hubot ban @Bob 1')
           .then(function () {
-            return delayPromise(100)
+            return delayPromise(10)
           })
           .then(function () {
             return room.user.say('Bob', 'hubot ban @Charlie 1')
           })
           .then(function () {
-            return delayPromise(100)
+            return delayPromise(10)
           })
           .then(function () {
             expect(room.messages).to.eql([
@@ -237,7 +237,7 @@ describe('Auth', function () {
       it('Unknown use', function () {
         return room.user.say('Unknown', 'hubot ban @Bob 1')
           .then(function () {
-            return delayPromise(100)
+            return delayPromise(10)
           })
           .then(function () {
             expect(room.messages).to.eql([

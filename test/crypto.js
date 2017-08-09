@@ -35,7 +35,7 @@ describe('Crypto', function () {
   describe('Chat Commands', function () {
     it('BTC->USD', function () {
       return room.user.say('Alice', 'BTC->USD').then(function () {
-        return delayPromise(100)
+        return delayPromise(10)
       }).then(function () {
         expect(room.messages).to.eql([
           ['Alice', 'BTC->USD'],
@@ -94,7 +94,7 @@ describe('Crypto', function () {
         }).then(function () {
           return room.user.say('Alice', '!crypto')
         }).then(function () {
-          return delayPromise(100)
+          return delayPromise(10)
         }).then(function () {
           expect(room.messages.length).to.equal(6)
           expect(room.messages[5]).to.match(/@Alice 1 ETH -> 10 USD\n1 BTC -> 100 USD/)

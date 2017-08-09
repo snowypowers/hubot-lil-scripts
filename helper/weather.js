@@ -103,17 +103,71 @@ const alias = {
   'Wl': 'Woodlands',
   'Ys': 'Yishun'
 }
+const attemptMatch = (inp) => {
+  let query = getMatch(inp)
+  if (query !== '') {
+    return { match: query }
+  } else {
+    let match = getCloseMatch(inp)
+    if (match.length === 1) {
+      return { match: match[0], info: `I think you meant: \`${match}\`` }
+    } else if (match.length > 0) {
+      return { info: `Did you mean: \`\`\`${match.join('\n')}\`\`\`` }
+    } else {
+      return { info: `Did you misspell the area? I couldn't find it! I got ${inp}` }
+    }
+  }
+}
 
-const get2HrCast = (robot) => {
-  return robot.http('https://api.data.gov.sg/v1/environment/2-hour-weather-forecast')
-    .header('api-key', process.env.HUBOT_WEATHER_KEY)
-    .get()
+const get2HrCast = (robot, areas) => {
+  return new Promise((resolve, reject) => {
+    robot.http('https://api.data.gov.sg/v1/environment/2-hour-weather-forecast')
+      .header('api-key', process.env.HUBOT_WEATHER_KEY)
+      .get()((err, resp, body) => {
+        if (err) {
+          reject(new Error(`Something went wrong with the API: ${err}`))
+        } else {
+          try {
+            const data = JSON.parse(body)
+            const weather = {}
+            if (typeof (areas) === 'string') {
+              areas = [areas]
+            }
+            data.items[0].forecasts.map((f) => {
+              let i = areas.indexOf(f.area)
+              if (i >= 0) {
+                weather[areas[i]] = f.forecast
+              }
+            })
+            resolve(weather)
+          } catch (e) {
+            reject(new Error(`Something went wrong with the response : ${e}`))
+          }
+        }
+      })
+  })
 }
 
 const get24HrCast = (robot) => {
-  return robot.http('https://api.data.gov.sg/v1/environment/24-hour-weather-forecast')
-    .header('api-key', process.env.HUBOT_WEATHER_KEY)
-    .get()
+  return new Promise((resolve, reject) => {
+    robot.http('https://api.data.gov.sg/v1/environment/24-hour-weather-forecast')
+      .header('api-key', process.env.HUBOT_WEATHER_KEY)
+      .get()((err, resp, body) => {
+        if (err) {
+          reject(new Error(`Something went wrong with the API: ${err}`))
+        } else {
+          try {
+            const data = JSON.parse(body)
+            const forecast = data.items[0].general.forecast
+            const tempLow = data.items[0].general.temperature.low
+            const tempHigh = data.items[0].general.temperature.high
+            resolve({ forecast, tempLow, tempHigh })
+          } catch (e) {
+            reject(new Error(`Something went wrong with the Response: ${err}`))
+          }
+        }
+      })
+  })
 }
 
 const getAlias = (query) => {
@@ -137,7 +191,7 @@ const getCloseMatch = (query) => {
       bestMatch.push(regions[i])
     }
   }
-  if (bestMatch.length > 0) return bestMatch
+  if (bestScore > 2 && bestMatch.length > 0) return bestMatch
   else return []
 }
 
@@ -180,6 +234,7 @@ const score = (candidate, standard) => {
 }
 
 module.exports = {
+  attemptMatch,
   get2HrCast,
   get24HrCast,
   getMatch,
