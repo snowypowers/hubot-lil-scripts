@@ -2,7 +2,7 @@
 //   Crypto-currency Report, based off API from Crypto-Compare
 //
 // Dependencies:
-//   None
+//   hubot-brain-redis
 //
 // Configuration:
 //   None
@@ -11,15 +11,15 @@
 //   XXX->YYY - Returns the price of 1 XXX in YYY. Eg: BTC->USD
 //   ? XXX->YYY - Returns the price of ? XXX in YYY. Eg: 5 BTC->ETH
 //   !crypto - Display your crypto report
-//   lil xxx/yyy - Same as XXX->YYY but with more relaxed rulings
-//   lil crypto add xxx/yyy - Add pair xxx/yyy to your crypto report
-//   lil crypto remove xxx/yyy - Remove pair xxx/yyy from your crypto report
-//   lil crypto list - Show your crypto report settings
+//   hubot xxx/yyy - Same as XXX->YYY but with more relaxed rulings
+//   hubot crypto add xxx/yyy - Add pair xxx/yyy to your crypto report
+//   hubot crypto remove xxx/yyy - Remove pair xxx/yyy from your crypto report
+//   hubot crypto list - Show your crypto report settings
 // Notes:
 //   None
 //
 // Author:
-//   Yak Jun Xiang<snowypowers@gmail.com>
+//   Yak Jun Xiang<yakjunxiang@gmail.com>
 
 const getPair = require('../src/crypto.js')
 

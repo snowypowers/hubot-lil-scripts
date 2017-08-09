@@ -8,12 +8,12 @@
 //   HUBOT_NEO_ADDR - The url for the full node
 //
 // Commands:
-//   lil neo height - Get the current height of the blockchain
-//   lil neo block <hash|index> - Get block. Accepts hash and index
-//   lil neo transaction <hash> - Get transaction
+//   hubot neo height - Get the current height of the blockchain
+//   hubot neo block <hash|index> - Get block. Accepts hash and index
+//   hubot neo transaction <hash> - Get transaction
 //
 // Author:
-//   Yak Jun Xiang <snowypowers@gmail.com>
+//   Yak Jun Xiang <yakjunxiang@gmail.com>
 //
 
 const methods = require('../src/neo.js')

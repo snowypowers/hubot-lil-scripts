@@ -8,15 +8,17 @@
 //   HUBOT_CATME_KEY: The API key from http://thecatapi.com
 //
 // Commands:
-//   lil pug me - Throws a pug at user
-//   lil pug bomb <n> - Throws <n> pugs at user, capped at 10
-//   lil cat me - Throws a cat at user
-//   lil cat bomb <n> - Throws <n> cats at user, capped at 10
+//   hubot pug me - Throws a pug at user
+//   hubot pug bomb <n> - Throws <n> pugs at user, capped at 10
+//   hubot cat me - Throws a cat at user
+//   hubot cat bomb <n> - Throws <n> cats at user, capped at 10
+//
 // Notes:
-//   <optional notes required for the script>
+//
 //
 // Author:
-//   Yak Jun Xiang<snowypowers@gmail.com>
+//   Yak Jun Xiang<yakjunxiang@gmail.com>
+
 const $ = require('cheerio')
 
 module.exports = function (robot) {

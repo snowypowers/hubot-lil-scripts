@@ -1,3 +1,18 @@
+// Description:
+//   Hubot Query API for Neo blockchain
+//
+// Dependencies:
+//   hubot-brain-redis
+//
+// Configuration:
+//   None
+//
+// Notes:
+//   This module reads options.rateLimit on each command and limits the rate of calling that command within a room / DM.
+//   Default is 1000ms.
+// Author:
+//   Yak Jun Xiang <yakjunxiang@gmail.com>
+//
 
 module.exports = function (robot) {
   const lastExecutedTime = {}

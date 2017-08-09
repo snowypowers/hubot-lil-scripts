@@ -8,16 +8,17 @@
 //   HUBOT_WEATHER_KEY: The API key from https://api.data.gov.sg
 //
 // Commands:
-//   lil weather area list - Return a list of areas
-//   lil weather <area> - Returns the 2 hour forecast for <area>
-//   lil daycast - Returns a 24hrs overall forecast for Singapore
+//   hubot weather area list - Return a list of areas
+//   hubot weather <area> - Returns the 2 hour forecast for <area>
+//   hubot daycast - Returns a 24hrs overall forecast for Singapore
 //
 //
 // Notes:
-//   <optional notes required for the script>
+//
 //
 // Author:
 //   Yak Jun Xiang<snowypowers@gmail.com>
+
 const w = require('../src/weather.js')
 
 module.exports = function (robot) {
@@ -94,16 +95,5 @@ module.exports = function (robot) {
 
   robot.hear(/!weather/i, {id: 'weather.report', powerLevel: 3, rateLimit: 10000}, (res) => {
 
-  })
-
-  robot.on('weather-report', (payload) => {
-    // Construct weather Report
-    let report = ''
-    // Send to target
-    if (payload.room) {
-      robot.messageRoom(payload.room, report)
-    } else if (payload.user) {
-      robot.send(payload.user, report)
-    }
   })
 }

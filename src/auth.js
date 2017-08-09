@@ -2,7 +2,7 @@
 //   Auth controls for the team
 //
 // Dependencies:
-//   None
+//   hubot-brain-redis
 //
 // Configuration:
 //   None
@@ -16,7 +16,7 @@
 //   None
 //
 // Author:
-//   Yak Jun Xiang<snowypowers@gmail.com>
+//   Yak Jun Xiang<yakjunxiang@gmail.com>
 
 module.exports = function (robot) {
   let admin = robot.brain.userForName(process.env.HUBOT_AUTH_ADMIN)
