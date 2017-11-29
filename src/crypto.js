@@ -34,7 +34,7 @@ module.exports = function (robot) {
       robot.brain.set('crypto', crypto)
     }
   })
-  robot.hear(/([0-9.]*)? ?([A-Z]{3})->([A-Z]{3})/, { id: 'crypto.getpair', powerLevel: 3 }, (res) => {
+  robot.hear(/([0-9.]*)? ?([A-Z]{3,})->([A-Z]{3,})/, { id: 'crypto.getpair', powerLevel: 3 }, (res) => {
     getPair(robot, res.match[2], res.match[3]).then((data) => {
       try {
         let amt = parseFloat(res.match[1])
@@ -52,7 +52,7 @@ module.exports = function (robot) {
     }, (err) => res.reply(err))
   })
 
-  robot.respond(/([A-Za-z]{3})\/([A-Za-z]{3})$/, { id: 'crypto.getpair', powerLevel: 3 }, (res) => {
+  robot.respond(/([A-Za-z]{3,})\/([A-Za-z]{3,})$/, { id: 'crypto.getpair', powerLevel: 3 }, (res) => {
     const fs = res.match[1].toUpperCase()
     const ts = res.match[2].toUpperCase()
     getPair(robot, fs, ts).then((data) => {
@@ -68,7 +68,7 @@ module.exports = function (robot) {
     }, (err) => res.reply(err))
   })
 
-  robot.respond(/crypto add ([A-Za-z]{3})\/([A-Za-z]{3})$/, { id: 'crypto.add', powerLevel: 3 }, (res) => {
+  robot.respond(/crypto add ([A-Za-z]{3,})\/([A-Za-z]{3,})$/, { id: 'crypto.add', powerLevel: 3 }, (res) => {
     const fs = res.match[1].toUpperCase()
     const ts = res.match[2].toUpperCase()
     const query = fs + '/' + ts
